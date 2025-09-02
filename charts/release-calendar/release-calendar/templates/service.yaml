@@ -1,0 +1,26 @@
+{{- range .Values.components }}
+{{- if and .service .service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Chart.Name }}-{{ .name }}
+  labels:
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/name: {{ $.Chart.Name }}
+    app.kubernetes.io/component: {{ .name }}
+  {{- with .service.annotations }}
+  annotations:
+{{ toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ default "ClusterIP" .service.type }}
+  selector:
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/component: {{ .name }}
+  ports:
+    - name: {{ default "http" .service.portName }}
+      port: {{ .service.port }}
+      targetPort: {{ default .containerPort .service.targetPort }}
+---
+{{- end }}
+{{- end }}

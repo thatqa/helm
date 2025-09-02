@@ -1,0 +1,25 @@
+{{- range .Values.components }}
+{{- if or .config .configData .binaryConfigData }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Chart.Name }}-{{ .name }}-conf
+  labels:
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/name: {{ $.Chart.Name }}
+    app.kubernetes.io/component: {{ .name }}
+data:
+  {{- if .config }}
+  {{ default "default.conf" .configFilename }}: |
+{{ tpl .config $ | nindent 4 }}
+  {{- end }}
+  {{- with .configData }}
+{{ toYaml . | nindent 2 }}
+  {{- end }}
+{{- with .binaryConfigData }}
+binaryData:
+{{ toYaml . | nindent 2 }}
+{{- end }}
+---
+{{- end }}
+{{- end }}

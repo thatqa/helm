@@ -1,0 +1,39 @@
+{{- range .Values.components }}
+{{- if and .service .service.enabled .ingress .ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $.Chart.Name }}-{{ .name }}-ingress
+  labels:
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/name: {{ $.Chart.Name }}
+    app.kubernetes.io/component: {{ .name }}
+  {{- with .ingress.annotations }}
+  annotations:
+{{ toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .ingress.className }}
+  ingressClassName: {{ . }}
+  {{- end }}
+  rules:
+    -
+      {{- with .ingress.host }}
+      host: {{ . }}
+      {{- end }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $.Chart.Name }}-{{ .name }}
+                port:
+                  number: {{ default 80 .service.port }}
+  {{- with .ingress.tls }}
+  tls:
+{{ toYaml . | nindent 4 }}
+  {{- end }}
+---
+{{- end }}
+{{- end }}

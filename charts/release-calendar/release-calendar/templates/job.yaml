@@ -1,0 +1,48 @@
+{{- if .Values.migrations.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $.Release.Name }}-{{ $.Chart.Name }}-migrate
+  labels:
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    app.kubernetes.io/name: {{ $.Chart.Name }}
+    app.kubernetes.io/component: migrate
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: {{ default 1 .Values.migrations.backoffLimit }}
+  {{- with .Values.migrations.ttlSecondsAfterFinished }}
+  ttlSecondsAfterFinished: {{ . }}
+  {{- end }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: {{ $.Release.Name }}
+        app.kubernetes.io/component: migrate
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: {{ .Values.migrations.image | quote }}
+          imagePullPolicy: {{ .Values.migrations.imagePullPolicy | default "IfNotPresent" }}
+          {{- with .Values.migrations.command }}
+          command:
+{{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.migrations.args }}
+          args:
+{{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.migrations.env }}
+          env:
+{{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.migrations.envFromSecrets }}
+          envFrom:
+            {{- range . }}
+            - secretRef:
+                name: {{ .name }}
+            {{- end }}
+          {{- end }}
+{{- end }}
