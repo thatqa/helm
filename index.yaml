@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  release-calendar:
+  - apiVersion: v2
+    appVersion: 0.1.2
+    created: "2025-09-02T16:55:23.778057643Z"
+    description: A Helm chart for release-calendar app
+    digest: 3d8efe6ba1313a4028d87b149182233db302812c39158b390865e57991eb18e9
+    name: release-calendar
+    type: application
+    urls:
+    - https://github.com/thatqa/helm/releases/download/release-calendar-0.1.2/release-calendar-0.1.2.tgz
+    version: 0.1.2
+generated: "2025-09-02T16:55:23.778063514Z"
