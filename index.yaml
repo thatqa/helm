@@ -3,6 +3,21 @@ entries:
   release-calendar:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-09-18T15:09:19.701052762Z"
+    description: 'Release Calendar — internal tool for managing and tracking software
+      releases.   Provides a web UI (Next.js frontend) and REST API (Go backend with
+      Gin + GORM).   Features include:   - Calendar view with per-day release statuses   -
+      Release CRUD (create, update, delete)   - Comment threads and discussion   -
+      Links to external resources (pipelines, dashboards, docs)   - AI-powered summarization
+      of notes and comments '
+    digest: 0f3fbe502e47777fc8199290ad960b0c46ea4699abd0db5e2262e96b1fc15ada
+    name: release-calendar
+    type: application
+    urls:
+    - https://github.com/thatqa/helm/releases/download/release-calendar-0.1.5/release-calendar-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-09-18T15:05:26.72801783Z"
     description: 'Release Calendar — internal tool for managing and tracking software
       releases.   Provides a web UI (Next.js frontend) and REST API (Go backend with
@@ -36,4 +51,4 @@ entries:
     urls:
     - https://github.com/thatqa/helm/releases/download/release-calendar-0.1.2/release-calendar-0.1.2.tgz
     version: 0.1.2
-generated: "2025-09-18T15:05:26.728033049Z"
+generated: "2025-09-18T15:09:19.701072419Z"
