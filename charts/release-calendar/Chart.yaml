@@ -10,5 +10,5 @@ description: |
     - Links to external resources (pipelines, dashboards, docs)
     - AI-powered summarization of notes and comments
 type: application
-version: 0.1.5
+version: 0.1.6
 appVersion: "1.0.0"

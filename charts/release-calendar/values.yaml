@@ -26,6 +26,11 @@ components:
       DB_USER: "user"
       DB_PASS: "password"
       DB_NAME: "release-calendar"
+      AI_API_KEY: ""
+      AI_TEMPERATURE: ""
+      AI_MODEL: ""
+      AI_MAX_TOKENS: ""
+      AI_URL: ""
 
   nginx:
     image: nginx:1.27-alpine
@@ -49,7 +54,7 @@ components:
           proxy_set_header Host $host;
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
           proxy_set_header X-Forwarded-Proto $scheme;
-          proxy_pass http://{{ $.Chart.Name }}-backend:8080/;
+          proxy_pass http://{{ $.Chart.Name }}-backend/;
         }
 
         location / {
