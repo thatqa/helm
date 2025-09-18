@@ -1,7 +1,7 @@
 ThatQA Charts Repository
 ---
 
-* Welcome to official ThatQA Helm Charts Repository!*
+### Welcome to official ThatQA Helm Charts Repository!
 
 Usage:
 ```
