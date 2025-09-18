@@ -23,9 +23,9 @@ components:
       BACKEND_PORT: "8080"
       DB_HOST: "mariadb"
       DB_PORT: "3306"
-      DB_USER: "docker"
-      DB_PASS: "secret"
-      DB_NAME: "stripchat"
+      DB_USER: "user"
+      DB_PASS: "password"
+      DB_NAME: "release-calendar"
 
   nginx:
     image: nginx:1.27-alpine
@@ -90,6 +90,6 @@ migrations:
     BACKEND_PORT: "8080"
     DB_HOST: "mariadb"
     DB_PORT: "3306"
-    DB_USER: "docker"
-    DB_PASS: "secret"
-    DB_NAME: "stripchat"
+    DB_USER: "user"
+    DB_PASS: "password"
+    DB_NAME: "release-calendar"
