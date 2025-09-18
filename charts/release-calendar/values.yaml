@@ -1,41 +1,33 @@
 components:
-  - name: frontend
+  frontend:
     replicas: 1
-    image: thatqa/release-calendar-frontend:0.0.1
+    image: thatqa/release-calendar-frontend:0.0.2
     service:
       enabled: true
       type: ClusterIP
       port: 80
       targetPort: 3000
     env:
-      - name: NEXT_PUBLIC_API_BASE
-        value: "/api"
+      NEXT_PUBLIC_API_BASE: "/api"
 
-  - name: backend
+  backend:
     replicas: 1
-    image: thatqa/release-calendar-api:0.0.1
+    image: thatqa/release-calendar-api:0.0.2
     service:
       enabled: true
       type: ClusterIP
       port: 80
       targetPort: 8080
     env:
-      - name: TZ
-        value: "UTC"
-      - name: BACKEND_PORT
-        value: "8080"
-      - name: DB_HOST
-        value: "mariadb"
-      - name: DB_PORT
-        value: "3306"
-      - name: DB_USER
-        value: "user"
-      - name: DB_PASS
-        value: "password"
-      - name: DB_NAME
-        value: "release-calendar"
+      TZ: "UTC"
+      BACKEND_PORT: "8080"
+      DB_HOST: "mariadb"
+      DB_PORT: "3306"
+      DB_USER: "docker"
+      DB_PASS: "secret"
+      DB_NAME: "stripchat"
 
-  - name: nginx
+  nginx:
     image: nginx:1.27-alpine
     replicas: 1
     service:
@@ -74,8 +66,8 @@ components:
         configMap:
           name: "{{ $.Chart.Name }}-nginx-conf"
           items:
-              - key: default.conf
-                path: default.conf
+            - key: default.conf
+              path: default.conf
     volumeMounts:
       - name: nginx-conf
         mountPath: /etc/nginx/conf.d/default.conf
@@ -84,8 +76,8 @@ components:
       enabled: true
       className: nginx
       host: release.calendar
-      annotations: { }
-      tls: [ ]
+      annotations: {}
+      tls: []
 
 migrations:
   enabled: true
@@ -94,17 +86,10 @@ migrations:
   backoffLimit: 1
   ttlSecondsAfterFinished: 300
   env:
-    - name: TZ
-      value: "UTC"
-    - name: BACKEND_PORT
-      value: "8080"
-    - name: DB_HOST
-      value: "mariadb"
-    - name: DB_PORT
-      value: "3306"
-    - name: DB_USER
-      value: "user"
-    - name: DB_PASS
-      value: "password"
-    - name: DB_NAME
-      value: "release-calendar"
+    TZ: "UTC"
+    BACKEND_PORT: "8080"
+    DB_HOST: "mariadb"
+    DB_PORT: "3306"
+    DB_USER: "docker"
+    DB_PASS: "secret"
+    DB_NAME: "stripchat"

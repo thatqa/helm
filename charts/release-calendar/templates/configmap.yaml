@@ -1,22 +1,22 @@
-{{- range .Values.components }}
-{{- if or .config .configData .binaryConfigData }}
+{{- range $name, $c := .Values.components }}
+{{- if or $c.config $c.configData $c.binaryConfigData }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $.Chart.Name }}-{{ .name }}-conf
+  name: {{ $.Chart.Name }}-{{ $name }}-conf
   labels:
     app.kubernetes.io/instance: {{ $.Release.Name }}
     app.kubernetes.io/name: {{ $.Chart.Name }}
-    app.kubernetes.io/component: {{ .name }}
+    app.kubernetes.io/component: {{ $name }}
 data:
-  {{- if .config }}
-  {{ default "default.conf" .configFilename }}: |
-{{ tpl .config $ | nindent 4 }}
+  {{- if $c.config }}
+  {{ default "default.conf" $c.configFilename }}: |
+{{ tpl $c.config $ | nindent 4 }}
   {{- end }}
-  {{- with .configData }}
+  {{- with $c.configData }}
 {{ toYaml . | nindent 2 }}
   {{- end }}
-{{- with .binaryConfigData }}
+{{- with $c.binaryConfigData }}
 binaryData:
 {{ toYaml . | nindent 2 }}
 {{- end }}

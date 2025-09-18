@@ -1,6 +1,14 @@
 apiVersion: v2
 name: release-calendar
-description: A Helm chart for release-calendar app
+description: |
+  Release Calendar — internal tool for managing and tracking software releases.  
+  Provides a web UI (Next.js frontend) and REST API (Go backend with Gin + GORM).  
+  Features include:
+    - Calendar view with per-day release statuses
+    - Release CRUD (create, update, delete)
+    - Comment threads and discussion
+    - Links to external resources (pipelines, dashboards, docs)
+    - AI-powered summarization of notes and comments
 type: application
-version: 0.1.3
-appVersion: "0.1.3"
+version: 0.1.4
+appVersion: "1.0.0"

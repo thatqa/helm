@@ -1,24 +1,23 @@
-{{- range .Values.components }}
-{{- if and .service .service.enabled .ingress .ingress.enabled }}
+{{- range $name, $c := .Values.components }}
+{{- if and $c.service $c.service.enabled $c.ingress $c.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ $.Chart.Name }}-{{ .name }}-ingress
+  name: {{ $.Chart.Name }}-{{ $name }}-ingress
   labels:
     app.kubernetes.io/instance: {{ $.Release.Name }}
     app.kubernetes.io/name: {{ $.Chart.Name }}
-    app.kubernetes.io/component: {{ .name }}
-  {{- with .ingress.annotations }}
+    app.kubernetes.io/component: {{ $name }}
+  {{- with $c.ingress.annotations }}
   annotations:
 {{ toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- with .ingress.className }}
+  {{- with $c.ingress.className }}
   ingressClassName: {{ . }}
   {{- end }}
   rules:
-    -
-      {{- with .ingress.host }}
+    - {{- with $c.ingress.host }}
       host: {{ . }}
       {{- end }}
       http:
@@ -27,10 +26,10 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ $.Chart.Name }}-{{ .name }}
+                name: {{ $.Chart.Name }}-{{ $name }}
                 port:
-                  number: {{ default 80 .service.port }}
-  {{- with .ingress.tls }}
+                  number: {{ default 80 $c.service.port }}
+  {{- with $c.ingress.tls }}
   tls:
 {{ toYaml . | nindent 4 }}
   {{- end }}

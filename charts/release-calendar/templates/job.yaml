@@ -2,10 +2,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ $.Release.Name }}-{{ $.Chart.Name }}-migrate
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-migrate
   labels:
-    app.kubernetes.io/instance: {{ $.Release.Name }}
-    app.kubernetes.io/name: {{ $.Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ .Chart.Name }}
     app.kubernetes.io/component: migrate
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
@@ -18,13 +18,13 @@ spec:
   template:
     metadata:
       labels:
-        app.kubernetes.io/instance: {{ $.Release.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: migrate
     spec:
       restartPolicy: Never
       containers:
         - name: migrate
-          image: {{ .Values.migrations.image | quote }}
+          image: {{ required "migrations.image is required" .Values.migrations.image | quote }}
           imagePullPolicy: {{ .Values.migrations.imagePullPolicy | default "IfNotPresent" }}
           {{- with .Values.migrations.command }}
           command:
@@ -36,7 +36,14 @@ spec:
           {{- end }}
           {{- with .Values.migrations.env }}
           env:
+{{- if kindIs "map" . }}
+{{- range $k, $v := . }}
+            - name: {{ $k }}
+              value: {{ $v | toString | quote }}
+{{- end }}
+{{- else }}
 {{ toYaml . | nindent 12 }}
+{{- end }}
           {{- end }}
           {{- with .Values.migrations.envFromSecrets }}
           envFrom:
